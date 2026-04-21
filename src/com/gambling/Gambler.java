@@ -71,4 +71,8 @@ public class Gambler {
         }
         return results;
     }
+
+    public boolean shouldContinueGambling(double totalNet) {
+        return totalNet > 0;
+    }
 }

@@ -105,7 +105,8 @@ public class GamblingSimulator {
         System.out.println();
         System.out.println("=== UC6: Continue or Stop Gambling ===");
 
-        if (totalNet > 0) {
+        boolean continueNext = gambler.shouldContinueGambling(totalNet);
+        if (continueNext) {
             System.out.println("Result: You WON $" + totalNet + " this month.");
             System.out.println("Decision: Continue gambling next month!");
         } else if (totalNet < 0) {
