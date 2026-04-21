@@ -75,4 +75,24 @@ public class Gambler {
     public boolean shouldContinueGambling(double totalNet) {
         return totalNet > 0;
     }
+
+    public List<MonthResult> playYear() {
+        List<MonthResult> yearResults = new ArrayList<>();
+        int monthNumber = 1;
+
+        while (monthNumber <= 12) {
+            List<DayResult> monthDays = playMonth();
+            double monthNet = 0;
+            for (DayResult day : monthDays) {
+                monthNet += day.getNetResult();
+            }
+            yearResults.add(new MonthResult(monthNumber, monthNet));
+
+            if (!shouldContinueGambling(monthNet)) {
+                break;
+            }
+            monthNumber++;
+        }
+        return yearResults;
+    }
 }

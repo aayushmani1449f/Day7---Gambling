@@ -120,37 +120,24 @@ public class GamblingSimulator {
         System.out.println();
         System.out.println("=== UC7: Multi-Month Gambling Simulation ===");
 
-        int monthNumber = 1;
+        List<MonthResult> yearResults = gambler.playYear();
         double grandTotal = 0;
-        boolean continueGambling = true;
 
-        while (continueGambling) {
-            System.out.println("-- Month " + monthNumber + " --");
-            List<DayResult> monthSim = gambler.playMonth();
-
-            double monthNet = 0;
-            for (DayResult day : monthSim) {
-                monthNet += day.getNetResult();
-            }
-
-            grandTotal += monthNet;
-
-            if (monthNet > 0) {
-                System.out.println("Month " + monthNumber + ": WON $" + monthNet
-                        + " | Cumulative: $" + grandTotal);
+        for (MonthResult month : yearResults) {
+            grandTotal += month.getNetResult();
+            if (month.isWon()) {
+                System.out.println("Month " + month.getMonthNumber() + ": WON  $"
+                        + month.getNetResult() + " | Cumulative: $" + grandTotal);
                 System.out.println("Decision: Continue next month.");
-                monthNumber++;
             } else {
-                System.out.println("Month " + monthNumber + ": LOST $" + Math.abs(monthNet)
-                        + " | Cumulative: $" + grandTotal);
+                System.out.println("Month " + month.getMonthNumber() + ": LOST $"
+                        + Math.abs(month.getNetResult()) + " | Cumulative: $" + grandTotal);
                 System.out.println("Decision: Stop gambling.");
-                continueGambling = false;
             }
+        }
 
-            if (monthNumber > 12) {
-                System.out.println("Played 12 months. Retiring for the year.");
-                continueGambling = false;
-            }
+        if (yearResults.size() == 12) {
+            System.out.println("Played all 12 months. Retiring for the year.");
         }
 
         System.out.println();
