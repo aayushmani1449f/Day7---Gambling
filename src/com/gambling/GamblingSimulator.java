@@ -17,7 +17,7 @@ public class GamblingSimulator {
         }
 
         System.out.println();
-        System.out.println("=== UC2: Calculative Gambler Exits at ±50% Stake ===");
+        System.out.println("=== UC2: Calculative Gambler Exits at +-50% Stake ===");
         gambler.resetStake();
         System.out.println("Starting stake: $" + gambler.getStake());
         System.out.println("High limit: $" + gambler.getHighLimit() + " | Low limit: $" + gambler.getLowLimit());
@@ -54,5 +54,32 @@ public class GamblingSimulator {
         } else {
             System.out.println("Broke even over 20 days.");
         }
+
+        System.out.println();
+        System.out.println("=== UC4: Monthly Report - Days Won and Lost ===");
+        System.out.printf("%-6s %-10s %-10s%n", "Day", "Result", "Amount");
+        System.out.println("---------------------------");
+
+        int daysWon = 0;
+        int daysLost = 0;
+        double totalWon = 0;
+        double totalLost = 0;
+
+        for (DayResult day : monthResults) {
+            String result = day.isWon() ? "WON" : "LOST";
+            double amount = Math.abs(day.getNetResult());
+            System.out.printf("%-6d %-10s $%-9.1f%n", day.getDayNumber(), result, amount);
+            if (day.isWon()) {
+                daysWon++;
+                totalWon += day.getNetResult();
+            } else {
+                daysLost++;
+                totalLost += Math.abs(day.getNetResult());
+            }
+        }
+
+        System.out.println("---------------------------");
+        System.out.println("Days Won : " + daysWon + " | Total Won  : $" + totalWon);
+        System.out.println("Days Lost: " + daysLost + " | Total Lost : $" + totalLost);
     }
 }
