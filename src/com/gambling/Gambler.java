@@ -1,5 +1,7 @@
 package com.gambling;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Gambler {
@@ -59,5 +61,14 @@ public class Gambler {
             playGame();
         }
         return stake - startingStake;
+    }
+
+    public List<DayResult> playMonth() {
+        List<DayResult> results = new ArrayList<>();
+        for (int day = 1; day <= 20; day++) {
+            double netResult = playDay();
+            results.add(new DayResult(day, netResult));
+        }
+        return results;
     }
 }
