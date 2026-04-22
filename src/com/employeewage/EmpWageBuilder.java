@@ -25,34 +25,41 @@ public class EmpWageBuilder {
     static final int IS_FULL_TIME     = 2;
 
     // ─── Instance Variables ─────────────────────────────────────────────────
-    private final String company;
-    private final int empRatePerHour;
-    private final int numOfWorkingDays;
-    private final int maxHoursPerMonth;
-    private int totalEmpWage;
+    private int numOfCompany = 0;
+    private CompanyEmpWage[] companyEmpWageArray;
 
-    public EmpWageBuilder(String company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth) {
-        this.company = company;
-        this.empRatePerHour = empRatePerHour;
-        this.numOfWorkingDays = numOfWorkingDays;
-        this.maxHoursPerMonth = maxHoursPerMonth;
+    public EmpWageBuilder() {
+        companyEmpWageArray = new CompanyEmpWage[5];
     }
 
-    // ─── Instance Method ────────────────────────────────────────────────────
+    public void addCompanyEmpWage(String company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth) {
+        companyEmpWageArray[numOfCompany] = new CompanyEmpWage(company, empRatePerHour, numOfWorkingDays, maxHoursPerMonth);
+        numOfCompany++;
+    }
+
+    // ─── Instance Methods ───────────────────────────────────────────────────
     /**
-     * Computes monthly employee wage for this company.
-     * Loops day by day until maxHoursPerMonth or numOfWorkingDays is reached.
-     * Uses Switch Case to determine daily hours based on random attendance.
+     * Loops through all companies added and computes wage for each.
      */
     public void computeEmpWage() {
+        for (int i = 0; i < numOfCompany; i++) {
+            companyEmpWageArray[i].setTotalEmpWage(this.computeEmpWage(companyEmpWageArray[i]));
+            System.out.println(companyEmpWageArray[i]);
+        }
+    }
+    /**
+     * Computes monthly employee wage for a specific company.
+     * Uses Switch Case to determine daily hours based on random attendance.
+     */
+    private int computeEmpWage(CompanyEmpWage companyEmpWage) {
         System.out.println("------------------------------------------------------------");
-        System.out.println("Computing Wage for Company: " + company);
+        System.out.println("Computing Wage for Company: " + companyEmpWage.company);
         System.out.println("------------------------------------------------------------");
 
         int totalEmpHrs  = 0;
         int day          = 0;
 
-        while (totalEmpHrs < maxHoursPerMonth && day < numOfWorkingDays) {
+        while (totalEmpHrs < companyEmpWage.maxHoursPerMonth && day < companyEmpWage.numOfWorkingDays) {
             day++;
 
             // UC1: Random attendance (0=Absent, 1=Part-time, 2=Full-time)
@@ -75,33 +82,36 @@ public class EmpWageBuilder {
                     status = "Absent   ";
             }
 
-            int dailyWage = empHrs * empRatePerHour;
+            int dailyWage = empHrs * companyEmpWage.empRatePerHour;
             totalEmpHrs  += empHrs;
-            totalEmpWage += dailyWage;
+            int totalEmpWage = totalEmpHrs * companyEmpWage.empRatePerHour;
 
             System.out.printf("Day #%2d | Status: %s | Hours: %d | Daily Wage: Rs. %-5d | Cumulative Hours: %d%n",
                     day, status, empHrs, dailyWage, totalEmpHrs);
         }
 
+        int totalWage = totalEmpHrs * companyEmpWage.empRatePerHour;
+
         // Summary
         System.out.println("------------------------------------------------------------");
         System.out.println("Exit Condition        : " +
-                (totalEmpHrs >= maxHoursPerMonth
-                        ? "Max hours (" + maxHoursPerMonth + " hrs) reached"
-                        : "Max days  (" + numOfWorkingDays + " days) reached"));
+                (totalEmpHrs >= companyEmpWage.maxHoursPerMonth
+                        ? "Max hours (" + companyEmpWage.maxHoursPerMonth + " hrs) reached"
+                        : "Max days  (" + companyEmpWage.numOfWorkingDays + " days) reached"));
         System.out.println("Total Days Worked     : " + day);
         System.out.println("Total Hours Worked    : " + totalEmpHrs);
-        System.out.println("Total Monthly Wage    : Rs. " + totalEmpWage);
+        System.out.println("Total Monthly Wage    : Rs. " + totalWage);
         System.out.println("------------------------------------------------------------\n");
+        return totalWage;
     }
 
     // ─── Entry Point ────────────────────────────────────────────────────────
     public static void main(String[] args) {
         System.out.println("Welcome to Employee Wage Computation Program");
-        EmpWageBuilder dmart = new EmpWageBuilder("DMart", 20, 2, 10);
-        EmpWageBuilder reliance = new EmpWageBuilder("Reliance", 10, 4, 20);
+        EmpWageBuilder empWageBuilder = new EmpWageBuilder();
+        empWageBuilder.addCompanyEmpWage("DMart", 20, 2, 10);
+        empWageBuilder.addCompanyEmpWage("Reliance", 10, 4, 20);
 
-        dmart.computeEmpWage();
-        reliance.computeEmpWage();
+        empWageBuilder.computeEmpWage();
     }
 }
