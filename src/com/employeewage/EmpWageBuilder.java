@@ -14,7 +14,7 @@ package com.employeewage;
  *      - Max Hours/Month    : 100
  *      - Loop exits when EITHER max hours OR max days is reached
  */
-public class EmployeeWageComputation {
+public class EmpWageBuilder {
 
     static final int FULL_DAY_HRS     = 8;
     static final int PART_DAY_HRS     = 4;
@@ -24,19 +24,32 @@ public class EmployeeWageComputation {
     static final int IS_PART_TIME     = 1;
     static final int IS_FULL_TIME     = 2;
 
-    // ─── Class Method ───────────────────────────────────────────────────────
+    // ─── Instance Variables ─────────────────────────────────────────────────
+    private final String company;
+    private final int empRatePerHour;
+    private final int numOfWorkingDays;
+    private final int maxHoursPerMonth;
+    private int totalEmpWage;
+
+    public EmpWageBuilder(String company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth) {
+        this.company = company;
+        this.empRatePerHour = empRatePerHour;
+        this.numOfWorkingDays = numOfWorkingDays;
+        this.maxHoursPerMonth = maxHoursPerMonth;
+    }
+
+    // ─── Instance Method ────────────────────────────────────────────────────
     /**
-     * Computes monthly employee wage.
-     * Loops day by day until MAX_HRS_IN_MONTH or NUM_WORKING_DAYS is reached.
+     * Computes monthly employee wage for this company.
+     * Loops day by day until maxHoursPerMonth or numOfWorkingDays is reached.
      * Uses Switch Case to determine daily hours based on random attendance.
      */
-    public static int computeEmpWage(String company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth) {
+    public void computeEmpWage() {
         System.out.println("------------------------------------------------------------");
         System.out.println("Computing Wage for Company: " + company);
         System.out.println("------------------------------------------------------------");
 
         int totalEmpHrs  = 0;
-        int totalEmpWage = 0;
         int day          = 0;
 
         while (totalEmpHrs < maxHoursPerMonth && day < numOfWorkingDays) {
@@ -80,13 +93,15 @@ public class EmployeeWageComputation {
         System.out.println("Total Hours Worked    : " + totalEmpHrs);
         System.out.println("Total Monthly Wage    : Rs. " + totalEmpWage);
         System.out.println("------------------------------------------------------------\n");
-        return totalEmpWage;
     }
 
     // ─── Entry Point ────────────────────────────────────────────────────────
     public static void main(String[] args) {
         System.out.println("Welcome to Employee Wage Computation Program");
-        computeEmpWage("DMart", 20, 2, 10);
-        computeEmpWage("Reliance", 10, 4, 20);
+        EmpWageBuilder dmart = new EmpWageBuilder("DMart", 20, 2, 10);
+        EmpWageBuilder reliance = new EmpWageBuilder("Reliance", 10, 4, 20);
+
+        dmart.computeEmpWage();
+        reliance.computeEmpWage();
     }
 }
