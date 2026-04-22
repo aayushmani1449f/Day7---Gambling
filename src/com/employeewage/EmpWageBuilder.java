@@ -87,6 +87,7 @@ public class EmpWageBuilder implements IComputeEmpWage {
             }
 
             int dailyWage = empHrs * companyEmpWage.empRatePerHour;
+            companyEmpWage.dailyWages.add(dailyWage);
             totalEmpHrs  += empHrs;
             int totalEmpWage = totalEmpHrs * companyEmpWage.empRatePerHour;
 
