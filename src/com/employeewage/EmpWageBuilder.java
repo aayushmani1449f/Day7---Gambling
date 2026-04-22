@@ -1,7 +1,9 @@
 package com.employeewage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * UC7: Refactor the Code to write a Class Method to Compute Employee Wage
@@ -29,15 +31,18 @@ public class EmpWageBuilder implements IComputeEmpWage {
 
     // ─── Instance Variables ─────────────────────────────────────────────────
     private List<CompanyEmpWage> companyEmpWageList;
+    private Map<String, CompanyEmpWage> companyToEmpWageMap;
 
     public EmpWageBuilder() {
         companyEmpWageList = new ArrayList<>();
+        companyToEmpWageMap = new HashMap<>();
     }
 
     @Override
     public void addCompanyEmpWage(String company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth) {
         CompanyEmpWage companyEmpWage = new CompanyEmpWage(company, empRatePerHour, numOfWorkingDays, maxHoursPerMonth);
         companyEmpWageList.add(companyEmpWage);
+        companyToEmpWageMap.put(company, companyEmpWage);
     }
 
     // ─── Instance Methods ───────────────────────────────────────────────────
@@ -50,6 +55,11 @@ public class EmpWageBuilder implements IComputeEmpWage {
             companyEmpWage.setTotalEmpWage(this.computeEmpWage(companyEmpWage));
             System.out.println(companyEmpWage);
         }
+    }
+
+    @Override
+    public int getTotalWage(String company) {
+        return companyToEmpWageMap.get(company).totalEmpWage;
     }
     /**
      * Computes monthly employee wage for a specific company.
@@ -118,5 +128,8 @@ public class EmpWageBuilder implements IComputeEmpWage {
         empWageBuilder.addCompanyEmpWage("Reliance", 10, 4, 20);
 
         empWageBuilder.computeEmpWage();
+
+        System.out.println("Total Wage for Reliance: Rs. " + empWageBuilder.getTotalWage("Reliance"));
+        System.out.println("Total Wage for DMart: Rs. " + empWageBuilder.getTotalWage("DMart"));
     }
 }
