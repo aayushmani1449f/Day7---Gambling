@@ -16,12 +16,8 @@ package com.employeewage;
  */
 public class EmployeeWageComputation {
 
-    // ─── Class Variables ────────────────────────────────────────────────────
-    static final int WAGE_PER_HOUR    = 20;
     static final int FULL_DAY_HRS     = 8;
     static final int PART_DAY_HRS     = 4;
-    static final int NUM_WORKING_DAYS = 20;
-    static final int MAX_HRS_IN_MONTH = 100;
 
     // Employee attendance type constants
     static final int IS_ABSENT        = 0;
@@ -34,14 +30,16 @@ public class EmployeeWageComputation {
      * Loops day by day until MAX_HRS_IN_MONTH or NUM_WORKING_DAYS is reached.
      * Uses Switch Case to determine daily hours based on random attendance.
      */
-    public static void computeEmpWage() {
+    public static int computeEmpWage(String company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth) {
+        System.out.println("------------------------------------------------------------");
+        System.out.println("Computing Wage for Company: " + company);
         System.out.println("------------------------------------------------------------");
 
         int totalEmpHrs  = 0;
         int totalEmpWage = 0;
         int day          = 0;
 
-        while (totalEmpHrs < MAX_HRS_IN_MONTH && day < NUM_WORKING_DAYS) {
+        while (totalEmpHrs < maxHoursPerMonth && day < numOfWorkingDays) {
             day++;
 
             // UC1: Random attendance (0=Absent, 1=Part-time, 2=Full-time)
@@ -64,7 +62,7 @@ public class EmployeeWageComputation {
                     status = "Absent   ";
             }
 
-            int dailyWage = empHrs * WAGE_PER_HOUR;
+            int dailyWage = empHrs * empRatePerHour;
             totalEmpHrs  += empHrs;
             totalEmpWage += dailyWage;
 
@@ -75,18 +73,20 @@ public class EmployeeWageComputation {
         // Summary
         System.out.println("------------------------------------------------------------");
         System.out.println("Exit Condition        : " +
-                (totalEmpHrs >= MAX_HRS_IN_MONTH
-                        ? "Max hours (" + MAX_HRS_IN_MONTH + " hrs) reached"
-                        : "Max days  (" + NUM_WORKING_DAYS + " days) reached"));
+                (totalEmpHrs >= maxHoursPerMonth
+                        ? "Max hours (" + maxHoursPerMonth + " hrs) reached"
+                        : "Max days  (" + numOfWorkingDays + " days) reached"));
         System.out.println("Total Days Worked     : " + day);
         System.out.println("Total Hours Worked    : " + totalEmpHrs);
         System.out.println("Total Monthly Wage    : Rs. " + totalEmpWage);
-        System.out.println("------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------\n");
+        return totalEmpWage;
     }
 
     // ─── Entry Point ────────────────────────────────────────────────────────
     public static void main(String[] args) {
-        System.out.println("Welcome to Employee Wage Computation Program on Master Branch");
-        computeEmpWage();
+        System.out.println("Welcome to Employee Wage Computation Program");
+        computeEmpWage("DMart", 20, 2, 10);
+        computeEmpWage("Reliance", 10, 4, 20);
     }
 }
