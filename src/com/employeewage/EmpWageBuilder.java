@@ -1,5 +1,8 @@
 package com.employeewage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * UC7: Refactor the Code to write a Class Method to Compute Employee Wage
  *      - All constants moved to Class Variables (static final)
@@ -25,17 +28,16 @@ public class EmpWageBuilder implements IComputeEmpWage {
     static final int IS_FULL_TIME     = 2;
 
     // ─── Instance Variables ─────────────────────────────────────────────────
-    private int numOfCompany = 0;
-    private CompanyEmpWage[] companyEmpWageArray;
+    private List<CompanyEmpWage> companyEmpWageList;
 
     public EmpWageBuilder() {
-        companyEmpWageArray = new CompanyEmpWage[5];
+        companyEmpWageList = new ArrayList<>();
     }
 
     @Override
     public void addCompanyEmpWage(String company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth) {
-        companyEmpWageArray[numOfCompany] = new CompanyEmpWage(company, empRatePerHour, numOfWorkingDays, maxHoursPerMonth);
-        numOfCompany++;
+        CompanyEmpWage companyEmpWage = new CompanyEmpWage(company, empRatePerHour, numOfWorkingDays, maxHoursPerMonth);
+        companyEmpWageList.add(companyEmpWage);
     }
 
     // ─── Instance Methods ───────────────────────────────────────────────────
@@ -44,9 +46,9 @@ public class EmpWageBuilder implements IComputeEmpWage {
      */
     @Override
     public void computeEmpWage() {
-        for (int i = 0; i < numOfCompany; i++) {
-            companyEmpWageArray[i].setTotalEmpWage(this.computeEmpWage(companyEmpWageArray[i]));
-            System.out.println(companyEmpWageArray[i]);
+        for (CompanyEmpWage companyEmpWage : companyEmpWageList) {
+            companyEmpWage.setTotalEmpWage(this.computeEmpWage(companyEmpWage));
+            System.out.println(companyEmpWage);
         }
     }
     /**
