@@ -14,7 +14,7 @@ package com.employeewage;
  *      - Max Hours/Month    : 100
  *      - Loop exits when EITHER max hours OR max days is reached
  */
-public class EmpWageBuilder {
+public class EmpWageBuilder implements IComputeEmpWage {
 
     static final int FULL_DAY_HRS     = 8;
     static final int PART_DAY_HRS     = 4;
@@ -32,6 +32,7 @@ public class EmpWageBuilder {
         companyEmpWageArray = new CompanyEmpWage[5];
     }
 
+    @Override
     public void addCompanyEmpWage(String company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth) {
         companyEmpWageArray[numOfCompany] = new CompanyEmpWage(company, empRatePerHour, numOfWorkingDays, maxHoursPerMonth);
         numOfCompany++;
@@ -41,6 +42,7 @@ public class EmpWageBuilder {
     /**
      * Loops through all companies added and computes wage for each.
      */
+    @Override
     public void computeEmpWage() {
         for (int i = 0; i < numOfCompany; i++) {
             companyEmpWageArray[i].setTotalEmpWage(this.computeEmpWage(companyEmpWageArray[i]));
